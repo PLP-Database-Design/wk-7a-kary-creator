@@ -1,49 +1,54 @@
+---WEEK 7 RETAKE
+
 --- Question 1 1NF ---
-SELECT OrderID,CustomerName,'Laptop'
-AS product
-FROM ProductDetail
-WHERE Products LIKE '%Laptop%'
-UNION ALL
-SELECT OrderID,CustomerName,'Mouse'
-FROM ProductDetail
-WHERE Products LIKE '%Mouse%'
-UNION ALL
-SELECT OrderID,CustomerName,'Tablet'
-FROM ProductDetail
-WHERE Products LIKE '%Tablet%'
-UNION ALL
-SELECT OrderID,CustomerName,'Keyboard'
-FROM ProductDetail
-WHERE Products LIKE '%Keyboard%'
-UNION ALL
-SELECT OrderID,CustomerName,'Phone'
-FROM ProductDetail
-WHERE Products LIKE '%Phone%';
+USE paymentdb;
 
---- Question 2 2NF ---
-INSERT INTO OrderDetails (OrderID, CustomerName, Product, Quantity)
-VALUES 
-    (101, 'John Doe', 'Laptop', 2),
-    (101, 'John Doe', 'Mouse', 1),
-    (102, 'Jane Smith', 'Tablet', 3),
-    (102, 'Jane Smith', 'Keyboard', 1),
-    (102, 'Jane Smith', 'Mouse', 2),
-    (103, 'Emily Clark', 'Phone', 1);
+CREATE TABLE productDetail(
+orderId INT,
+CustomerName VARCHAR(100),
+products VARCHAR(100)
+);
 
---- Products table
-    CREATE  TABLE OrderProducts (
-    OrderID INT,
-    Product VARCHAR(100),
-    Quantity INT,
-    PRIMARY KEY (OrderID, Product),
-    FOREIGN KEY (OrderID) REFERENCES Orders(OrderID));
+--- Insert Data
+INSERT INTO productDetail(orderId,customerName,products)
+VALUES (101,'John Doe','laptop'),
+        (101,'John Doe','mouse'),
+        (102,'Jane Smith','Tablet'),
+        (102,'Jane Smith','keyboard'),
+        (103,'Emily Clark','phone');
+        
+        SELECT * FROM productdetail;
 
---- data in table Ordes
-INSERT INTO Orders (OrderID, CustomerName)
-SELECT DISTINCT OrderID, CustomerName
-FROM OrderDetails;
+    --- Question 2 2NF ---
+        CREATE TABLE orders(
+         orderId INT PRIMARY KEY,
+        CustomerName VARCHAR(100)
+        );
 
---- data in table OrderProducts
-INSERT INTO Order_Products (OrderID, Product, Quantity)
-SELECT OrderID, Product, Quantity
-FROM OrderDetails;
+        INSERT INTO orders(orderId,CustomerName)
+         VALUES(101,'John Doe'),
+			   (102,'Jane Smith'),
+               (103,'Emily Clark');
+
+    CREATE TABLE product(
+     productId INT PRIMARY KEY,
+     productName VARCHAR(100),
+     quantity INT,
+     orderId INT,
+    FOREIGN KEY (orderId)REFERENCES orders(orderId)
+  );
+
+INSERT INTO product(productId,productName,quantity,orderId)
+            VALUES (1, 'laptop',2,101),
+				    (2, 'mouse',1,101),
+                    (3, 'Tablet',3,102),
+                    (4, 'keyboard',2,102),
+                    (5, 'mouse',1,102),
+                    (6, 'phone',1,103);
+                    
+
+
+
+
+
+
